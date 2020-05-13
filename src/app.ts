@@ -48,7 +48,7 @@ function validate(validatableInputs: validatable[]): validation {
       inputErrors.push(`The ${validatableInput.name} must be numeric.`)
     }
   
-    if (validatableInput.min) {
+    if (validatableInput.min != null) {
       if (typeof validatableInput.value === 'number' && validatableInput.value < validatableInput.min) {
         isValid = false
         inputErrors.push(`The ${validatableInput.name} must greater or equal than ${validatableInput.min}.`)
@@ -58,7 +58,7 @@ function validate(validatableInputs: validatable[]): validation {
       }
     }
   
-    if (validatableInput.max) {
+    if (validatableInput.max != null) {
       if (typeof validatableInput.value === 'number' && validatableInput.value > validatableInput.max) {
         isValid = false
         inputErrors.push(`The ${validatableInput.name} must less or equal than ${validatableInput.max}.`)
@@ -109,13 +109,13 @@ class ProjectInput {
   private gatherUserInput(): [string, string, number] | void {
     const title = this.titleInputElement.value
     const description = this.descriptionInputElement.value
-    const people = this.peopleInputElement.value
+    const people = parseInt(this.peopleInputElement.value)
 
-    const validator = validate([
-      { name: 'title', value: title, required: true, min: 10 },
-      { name: 'description', value: description, required: true, min: 10 },
-      { name: 'people', value: people, required: true, numeric: true, min: 1 }
-    ])
+    const titleValidable: validatable = { name: 'title', value: title, required: true, min: 10 }
+    const descriptionValidable: validatable = { name: 'description', value: description, required: true, min: 10 }
+    const peopleValidable: validatable = { name: 'people', value: people, required: true, numeric: true, min: 1, max: 5 }
+
+    const validator = validate([titleValidable, descriptionValidable, peopleValidable])
 
     if (!validator.isValid) {
       alert('invalid')
@@ -123,7 +123,7 @@ class ProjectInput {
       return
     }
 
-    return [title, description, parseInt(people)]
+    return [title, description, people]
   }
 
   private clearInputs() {
