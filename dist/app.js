@@ -78,7 +78,7 @@ class ProjectInput {
     gatherUserInput() {
         const title = this.titleInputElement.value;
         const description = this.descriptionInputElement.value;
-        const people = parseInt(this.peopleInputElement.value);
+        const people = /^[1-9]([0-9]?)/.test(this.peopleInputElement.value) ? parseInt(this.peopleInputElement.value) : this.peopleInputElement.value;
         const titleValidable = { name: 'title', value: title, required: true, min: 10 };
         const descriptionValidable = { name: 'description', value: description, required: true, min: 10 };
         const peopleValidable = { name: 'people', value: people, required: true, numeric: true, min: 1, max: 5 };
@@ -88,7 +88,7 @@ class ProjectInput {
             console.log(validator.errors);
             return;
         }
-        return [title, description, people];
+        return [title, description, +people];
     }
     clearInputs() {
         this.titleInputElement.value = '';

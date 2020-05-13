@@ -109,7 +109,7 @@ class ProjectInput {
   private gatherUserInput(): [string, string, number] | void {
     const title = this.titleInputElement.value
     const description = this.descriptionInputElement.value
-    const people = parseInt(this.peopleInputElement.value)
+    const people = /^[1-9]([0-9]?)/.test(this.peopleInputElement.value) ? parseInt(this.peopleInputElement.value) : this.peopleInputElement.value
 
     const titleValidable: validatable = { name: 'title', value: title, required: true, min: 10 }
     const descriptionValidable: validatable = { name: 'description', value: description, required: true, min: 10 }
@@ -123,7 +123,7 @@ class ProjectInput {
       return
     }
 
-    return [title, description, people]
+    return [title, description, +people]
   }
 
   private clearInputs() {
